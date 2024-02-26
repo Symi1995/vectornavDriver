@@ -12,6 +12,8 @@
 #include <memory>
 #include <string>
 #include <queue>
+#include <iostream>
+#include <iomanip>
 
 #if __linux__ || __CYGWIN__
 #include <fcntl.h>
@@ -31,12 +33,14 @@
 #include "vectornav_msgs/msg/ins_group.hpp"
 #include "vectornav_msgs/msg/time_group.hpp"
 #include "vectornav_msgs/action/mag_cal.hpp"
+#include "mavros_msgs/msg/rtcm.hpp"
 
 // VectorNav libvncxx
 #include "vn/compositedata.h"
 #include "vn/sensors.h"
 #include "vn/util.h"
 #include "vn/vector.h"
+#include "vn/types.h"
 
 using namespace std::chrono_literals;
 using namespace std::placeholders;
@@ -173,6 +177,9 @@ public:
     sub_vel_aiding_ = this->create_subscription<geometry_msgs::msg::Twist>(
       "vectornav/velocity_aiding", 1, std::bind(&Vectornav::vel_aiding_cb, this, _1));
 
+    //RTCM subscription
+    rtcm_subscription = this->create_subscription<mavros_msgs::msg::RTCM>("/ntrip_client/rtcm", 10, std::bind(&Vectornav::rtcm_sender_callback, this, std::placeholders::_1));
+    
     // magnetic cal action
     server_mag_cal_ = rclcpp_action::create_server<MagCal>(
       this, "vectornav/mag_cal",
@@ -501,6 +508,21 @@ private:
       static_cast<float>(msg->linear.x), static_cast<float>(msg->linear.y),
       static_cast<float>(msg->linear.z)};
     vs_->writeVelocityCompensationMeasurement(velocity, waitForReply);
+  }
+
+//Topic callback for RTCM subscriptions
+  void rtcm_sender_callback(const mavros_msgs::msg::RTCM::SharedPtr msg)
+  {   
+    
+    std::ostringstream rtcm_ms;
+    
+    for (int a = 0; a < msg->data.size(); a++)
+    {
+      rtcm_ms << msg->data[a];
+    }
+    std::string data = rtcm_ms.str();
+    vs_->send(data, false);
+
   }
 
   /**
@@ -889,6 +911,13 @@ private:
     if (compositeData.hasTimeGpsPps()) {
       msg.timegpspps = compositeData.timeGpsPps();
     }
+
+    // Printing the value of uncertainty of the x, y, z positions.
+
+    std::cout << "\n\n----------------- anyPositionUncertainty: "<< 
+        compositeData.anyPositionUncertainty().x << ", " << 
+        compositeData.anyPositionUncertainty().y << ", " << 
+        compositeData.anyPositionUncertainty().z << std::endl;
 
     // Publish
     node->pub_common_->publish(msg);
@@ -1477,6 +1506,7 @@ private:
 
   // Subscriptions
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr sub_vel_aiding_;
+  rclcpp::Subscription<mavros_msgs::msg::RTCM>::SharedPtr rtcm_subscription;
 
   /// Action servers for calibration
   rclcpp_action::Server<vectornav_msgs::action::MagCal>::SharedPtr server_mag_cal_;

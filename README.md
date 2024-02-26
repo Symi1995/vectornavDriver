@@ -7,27 +7,45 @@ It has been entirely redesigned from the ROS1 package to provide a good basis to
 without requiring modification of the node itself. The majority of the device configuration settings are 
 exposed as ROS2 parameters that can be modified from a launch file. 
 
+I added a subscriber to the code, which reads the ntrip_client topic,
+and also add a "send" function from the vectornav functions,
+which forwards the rtcm messages to the sensor for proper rtk correction.
 
-## QuickStart
 
-Build
+## Install dependencies
 
-1. git clone https://github.com/dawonn/vectornav.git -b ros2
-2. cd vectornav 
-3. colcon build
+### Install mavros:
 
-Run with ros2 run (Option 1)
+1. sudo apt-get install ros-<rosdistro>-mavros ros-<rosdistro>-mavros-extras
 
-4. (Terminal 1) ros2 run vectornav vectornav
-5. (Terminal 2) ros2 topic echo /vectornav/raw/common
-6. (Terminal 3) ros2 run vectornav vn_sensor_msgs
-7. (Terminal 4) ros2 topic echo /vectornav/imu
+### Install ntrip_client:
 
-Run with ros2 launch (Option 2, uses parameters from `vectornav.yaml`)
+1. mkdir ros2_ws/src -p && cd ros2_ws/src
+2. git clone https://github.com/LORD-MicroStrain/ntrip_client.git -b ros2
 
-8. (Terminal 1) ros2 launch vectornav vectornav.launch.py
-9. (Terminal 2) ros2 topic echo /vectornav/raw/common
-10. (Terminal 3) ros2 topic echo /vectornav/imu
+### Install nmea_msgs:
+
+1. cd ros2_ws/src
+2. git clone https://github.com/ros-drivers/nmea_msgs.git -b ros2
+
+### Install vectornavDriver:
+
+1. cd ros2_ws/src
+2. git clone https://github.com/Symi1995/vectornavDriver.git -b ros2
+
+
+## Build
+
+1. cd ros2_ws
+2. colcon build
+
+
+## Quick start
+
+1. source ros2_ws/install/steup.bash
+2. ros2 launch ntrip_client ntrip_client_launch.py 
+3. ros2 launch vectornav vectornav.launch.py 
+
 
 ## vectornav node
 
@@ -40,7 +58,14 @@ via ROS parameters and publishes sensor data via custom ROS topics as close to r
 This node will convert the custom raw data topics into ROS2 sensor_msgs topics to make it easier 
 to integrate with other ROS2 packages. 
 
+## Comment
+
+This driver work succesfully only the ros2 humble or newer version. If you want use it on older version like foxy,
+than you must copy two file from humble workspace:
+	tf2_geometry_msgs.hpp --> /opt/ros/foxy/include/tf2_geometry_msgs
+	tf2_sensor_msgs.hpp --> /opt/ros/foxy/include/tf2_sensor_msgs
 
 ## References 
 
 [1] [VectorNav](http://www.vectornav.com/)
+[2] [Dereck Wonnacott - dawonn](https://github.com/dawonn/vectornav/tree/ros2)
