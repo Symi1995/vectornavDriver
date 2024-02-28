@@ -17,47 +17,37 @@ which forwards the rtcm messages to the sensor for proper rtk correction.
 ### Install mavros:
 
 ```
-
 sudo apt-get install ros-<rosdistro>-mavros ros-<rosdistro>-mavros-extras
-
 ```
 
 ### Install ntrip_client:
 
 ```
-
 mkdir ros2_ws/src -p && cd ros2_ws/src
 git clone https://github.com/LORD-MicroStrain/ntrip_client.git -b ros2
-
 ```
 
 ### Install nmea_msgs:
 
 ```
-
 cd ros2_ws/src
 git clone https://github.com/ros-drivers/nmea_msgs.git -b ros2
-
 ```
 
 ### Install vectornavDriver:
 
 ```  
-
 cd ros2_ws/src
 git clone https://github.com/Symi1995/vectornavDriver.git -b ros2
 rosdep install --from-paths src --ignore-src -r -y
-
 ```  
 
 
 ## Build:
 
 ```
-
 cd ros2_ws
 colcon build
-
 ```
 
 ## Quick start:
@@ -66,7 +56,6 @@ colcon build
 source ros2_ws/install/steup.bash
 ros2 launch ntrip_client ntrip_client_launch.py 
 ros2 launch vectornav vectornav.launch.py  
-
 ```
 Before run the driver, you have to grant permission to the `/dev/ttyUSB0` port with `sudo chmod`.
 
