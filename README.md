@@ -57,7 +57,7 @@ source ros2_ws/install/steup.bash
 ros2 launch ntrip_client ntrip_client_launch.py 
 ros2 launch vectornav vectornav.launch.py  
 ```
-Before run the driver, you have to grant permission to the `/dev/ttyUSB0` port with `sudo chmod`.
+Before runing the driver, you have to grant permission to the `/dev/ttyUSB0` port with `sudo chmod`.
 
 
 ## vectornav node:
