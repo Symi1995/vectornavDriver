@@ -52,11 +52,11 @@ which forwards the rtcm messages to the sensor for proper rtk correction.
 
 ## Quick start
 
-'''  
+'''
 1. source ros2_ws/install/steup.bash
 2. ros2 launch ntrip_client ntrip_client_launch.py 
-3. ros2 launch vectornav vectornav.launch.py 
-'''  
+3. ros2 launch vectornav vectornav.launch.py  
+'''
 
 
 ## vectornav node
