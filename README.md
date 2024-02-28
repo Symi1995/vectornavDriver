@@ -70,25 +70,25 @@ ros2 launch vectornav vectornav.launch.py
 ```
 
 
-## vectornav node
+## vectornav node:
 
 This node provides a ROS2 interface for a vectornav device. It can be configured
 via ROS parameters and publishes sensor data via custom ROS topics as close to raw as possible.
 
 
-## vn_sensor_msgs node
+## vn_sensor_msgs node:
 
 This node will convert the custom raw data topics into ROS2 sensor_msgs topics to make it easier 
 to integrate with other ROS2 packages. 
 
-## Comment
+
+## Comment:
 
 This driver work succesfully only the ros2 humble or newer version. If you want use it on older version like foxy,
-than you must copy two file from humble workspace:  
-	-tf2_geometry_msgs.hpp --> /opt/ros/foxy/include/tf2_geometry_msgs\n
-	-tf2_sensor_msgs.hpp --> /opt/ros/foxy/include/tf2_sensor_msgs
+than you must copy two file from humble workspace. So copy `tf2_geometry_msgs.hpp` to `/opt/ros/foxy/include/tf2_geometry_msgs` and `tf2_sensor_msgs.hpp` to `/opt/ros/foxy/include/tf2_sensor_msgs`.
 
-## References 
+
+## References:
 
 [1] [VectorNav](http://www.vectornav.com/)  
 [2] [Dereck Wonnacott - dawonn](https://github.com/dawonn/vectornav/tree/ros2)
