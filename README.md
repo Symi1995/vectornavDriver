@@ -18,42 +18,56 @@ which forwards the rtcm messages to the sensor for proper rtk correction.
 
 ```
 
-1. sudo apt-get install ros-<rosdistro>-mavros ros-<rosdistro>-mavros-extras
+sudo apt-get install ros-<rosdistro>-mavros ros-<rosdistro>-mavros-extras
 
 ```
 
 ### Install ntrip_client:
-'''
-1. mkdir ros2_ws/src -p && cd ros2_ws/src
-2. git clone https://github.com/LORD-MicroStrain/ntrip_client.git -b ros2
-'''
+
+```
+
+mkdir ros2_ws/src -p && cd ros2_ws/src
+git clone https://github.com/LORD-MicroStrain/ntrip_client.git -b ros2
+
+```
 
 ### Install nmea_msgs:
-'''
-1. cd ros2_ws/src
-2. git clone https://github.com/ros-drivers/nmea_msgs.git -b ros2
-'''
+
+```
+
+cd ros2_ws/src
+git clone https://github.com/ros-drivers/nmea_msgs.git -b ros2
+
+```
 
 ### Install vectornavDriver:
-'''  
-1. cd ros2_ws/src
-2. git clone https://github.com/Symi1995/vectornavDriver.git -b ros2
-3. rosdep install --from-paths src --ignore-src -r -y
-'''  
+
+```  
+
+cd ros2_ws/src
+git clone https://github.com/Symi1995/vectornavDriver.git -b ros2
+rosdep install --from-paths src --ignore-src -r -y
+
+```  
 
 
-## Build
-'''
-1. cd ros2_ws
-2. colcon build
-'''
+## Build:
 
-## Quick start
-'''
-1. source ros2_ws/install/steup.bash
-2. ros2 launch ntrip_client ntrip_client_launch.py 
-3. ros2 launch vectornav vectornav.launch.py  
-'''
+```
+
+cd ros2_ws
+colcon build
+
+```
+
+## Quick start:
+
+```
+source ros2_ws/install/steup.bash
+ros2 launch ntrip_client ntrip_client_launch.py 
+ros2 launch vectornav vectornav.launch.py  
+
+```
 
 
 ## vectornav node
