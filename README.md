@@ -15,9 +15,12 @@ which forwards the rtcm messages to the sensor for proper rtk correction.
 ## Install dependencies
 
 ### Install mavros:
-'''
+
+```
+
 1. sudo apt-get install ros-<rosdistro>-mavros ros-<rosdistro>-mavros-extras
-'''
+
+```
 
 ### Install ntrip_client:
 '''
