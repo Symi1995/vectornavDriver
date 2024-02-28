@@ -32,6 +32,7 @@ which forwards the rtcm messages to the sensor for proper rtk correction.
 
 1. cd ros2_ws/src
 2. git clone https://github.com/Symi1995/vectornavDriver.git -b ros2
+3. rosdep install --from-paths src --ignore-src -r -y
 
 
 ## Build
