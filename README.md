@@ -39,6 +39,7 @@ git clone https://github.com/ros-drivers/nmea_msgs.git -b ros2
 ```  
 cd ros2_ws/src
 git clone https://github.com/Symi1995/vectornavDriver.git -b ros2
+cd ..
 rosdep install --from-paths src --ignore-src -r -y
 ```  
 
