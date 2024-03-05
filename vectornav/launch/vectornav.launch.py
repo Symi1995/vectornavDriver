@@ -22,10 +22,16 @@ def generate_launch_description():
         output='screen',
         parameters=[os.path.join(this_dir, 'config', 'vectornav.yaml')])
 
+    start_vectornav_broadcaster = Node(
+        package='vectornav',
+        executable='broadcaster',
+        output='screen')
+    
     # Create the launch description and populate
     ld = LaunchDescription()
 
     ld.add_action(start_vectornav_cmd)
     ld.add_action(start_vectornav_sensor_msgs_cmd)
+    ld.add_action(start_vectornav_broadcaster)
 
     return ld
