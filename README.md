@@ -34,6 +34,13 @@ cd ros2_ws/src
 git clone https://github.com/ros-drivers/nmea_msgs.git -b ros2
 ```
 
+### Install rtcm_msgs:
+
+```
+cd ros2_ws/src
+git clone https://github.com/tilk/rtcm_msgs.git
+```
+
 ### Install vectornavDriver:
 
 ```  
