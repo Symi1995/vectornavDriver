@@ -79,11 +79,14 @@ via ROS parameters and publishes sensor data via custom ROS topics as close to r
 This node will convert the custom raw data topics into ROS2 sensor_msgs topics to make it easier 
 to integrate with other ROS2 packages. 
 
+## ntrip_client:
+
+This package use two more package: `nmea_msgs` and `rtcm_msgs`. You have to install them and write the correct rtcm client parameters: `usr`, `pass`, `broadcast address`, `port` and `mount point` to the launch params or ntrip_ros.py.
 
 ## Comment:
 
-This driver work succesfully only the ros2 humble or newer version. If you want use it on older version like foxy,
-than you must copy two file from humble workspace. So copy `tf2_geometry_msgs.hpp` to `/opt/ros/foxy/include/tf2_geometry_msgs` and `tf2_sensor_msgs.hpp` to `/opt/ros/foxy/include/tf2_sensor_msgs`.
+This driver work succesfully only the ros2 humble.
+If you want use it on older version like foxy, than you must copy two file from humble workspace. So copy `tf2_geometry_msgs.hpp` to `/ opt/ros/foxy/include/tf2_geometry_msgs` and `tf2_sensor_msgs.hpp` to `/opt/ros/foxy/include/tf2_sensor_msgs`. Furthermore the `broadcaster.cpp` is not work correctly in ros2 foxy you have to remove it from CMakeLists.txt or you have to rewrite it to ros2 foxy format. The [ROS2 Foxy documentation](https://docs.ros.org/en/foxy/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Broadcaster-Cpp.html#) will help you do that.
 
 
 ## References:
