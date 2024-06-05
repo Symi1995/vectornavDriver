@@ -27,7 +27,7 @@ private:
 
     t.header.stamp = this->get_clock()->now();
     t.header.frame_id = "map";
-    t.child_frame_id = "vectornav";
+    t.child_frame_id = "golf/vectornav";
 
     double utmX, utmY;
     coordinate_transition.LatLonToUTMXY(msg.position.x, msg.position.y, utmX, utmY);
