@@ -1,37 +1,47 @@
 import os
 
-from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
 
     this_dir = get_package_share_directory('vectornav')
     
     # Vectornav
-    start_vectornav_cmd = Node(
+    vectornav_cmd = Node(
+        namespace='golf',
         package='vectornav', 
         executable='vectornav',
         output='screen',
         parameters=[os.path.join(this_dir, 'config', 'vectornav.yaml')])
     
-    start_vectornav_sensor_msgs_cmd = Node(
+    vectornav_sensor_msgs_cmd = Node(
+        namespace='golf',
         package='vectornav', 
         executable='vn_sensor_msgs',
         output='screen',
         parameters=[os.path.join(this_dir, 'config', 'vectornav.yaml')])
 
-    start_vectornav_broadcaster = Node(
+    vectornav_broadcaster = Node(
+        namespace='golf',
         package='vectornav',
         executable='broadcaster',
         output='screen')
     
-    # Create the launch description and populate
-    ld = LaunchDescription()
+    tf_vectornav = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            get_package_share_directory('vectornav') + '/launch/tf_vectornav.launch.py'
+        )
+    )
 
-    ld.add_action(start_vectornav_cmd)
-    ld.add_action(start_vectornav_sensor_msgs_cmd)
-    ld.add_action(start_vectornav_broadcaster)
+    return LaunchDescription([
+        tf_vectornav,
+        vectornav_cmd,
+        vectornav_sensor_msgs_cmd,
+        vectornav_broadcaster
+    ])
 
     return ld

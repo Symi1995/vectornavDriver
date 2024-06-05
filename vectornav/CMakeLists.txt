@@ -31,19 +31,25 @@ find_package(tf2_ros)
 # vncxx
 add_subdirectory(vnproglib-1.2.0.0/cpp)
 
+include_directories(
+    include 
+    ${catkin_INCLUDE_DIRS}
+)
+
 # vectornav
 add_executable(${PROJECT_NAME} src/vectornav.cc)
 ament_target_dependencies(
-    ${PROJECT_NAME} 
-    rclcpp 
-    geometry_msgs 
-    vectornav_msgs 
-    rclcpp_action 
-    mavros_msgs)
+    ${PROJECT_NAME}
+    rclcpp
+    geometry_msgs
+    vectornav_msgs
+    rclcpp_action
+    mavros_msgs
+)
 target_link_libraries(${PROJECT_NAME} vncxx )
 
 # broadcaster
-add_executable(broadcaster src/broadcaster.cpp)
+add_executable(broadcaster src/broadcaster.cpp src/utm.cpp)
 ament_target_dependencies(
     broadcaster
     geometry_msgs
@@ -53,13 +59,15 @@ ament_target_dependencies(
 )
 
 # vn_sensor_msgs
-add_executable(vn_sensor_msgs src/vn_sensor_msgs.cc)
+add_executable(vn_sensor_msgs src/vn_sensor_msgs.cc src/utm.cpp)
 ament_target_dependencies(
-    vn_sensor_msgs 
-    rclcpp 
-    sensor_msgs 
-    vectornav_msgs 
-    tf2_geometry_msgs)
+    vn_sensor_msgs
+    rclcpp
+    sensor_msgs
+    vectornav_msgs
+    tf2_geometry_msgs
+)
+
 
 # install
 install(TARGETS

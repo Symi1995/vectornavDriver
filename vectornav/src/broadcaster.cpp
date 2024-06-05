@@ -2,6 +2,8 @@
 #include "tf2_ros/transform_broadcaster.h"
 #include "geometry_msgs/msg/transform_stamped.hpp"
 
+#include "vectornav/UTM.h"
+
 
 class FramePublisher : public rclcpp::Node
 {
@@ -24,12 +26,15 @@ private:
     geometry_msgs::msg::TransformStamped t;
 
     t.header.stamp = this->get_clock()->now();
-    t.header.frame_id = "world";
+    t.header.frame_id = "map";
     t.child_frame_id = "vectornav";
 
-    t.transform.translation.x = msg.position.x;
-    t.transform.translation.y = msg.position.y;
-    t.transform.translation.z = msg.position.z;
+    double utmX, utmY;
+    coordinate_transition.LatLonToUTMXY(msg.position.x, msg.position.y, utmX, utmY);
+
+    t.transform.translation.x = utmX;
+    t.transform.translation.y = utmY;
+    t.transform.translation.z = 1.8;
 
     t.transform.rotation.x = msg.quaternion.x;
     t.transform.rotation.y = msg.quaternion.y;
@@ -43,6 +48,7 @@ private:
 
   rclcpp::Subscription<vectornav_msgs::msg::CommonGroup>::SharedPtr subscription_;
   std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
+  CoordinateTransition coordinate_transition;
 
 };
 

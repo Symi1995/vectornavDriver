@@ -12,6 +12,8 @@
 #include <memory>
 #include <string>
 
+#include "vectornav/UTM.h"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "geometry_msgs/msg/twist_with_covariance_stamped.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -63,7 +65,6 @@ public:
     pub_time_pps_ =
       this->create_publisher<sensor_msgs::msg::TimeReference>("vectornav/time_pps", 10);
     pub_imu_ = this->create_publisher<sensor_msgs::msg::Imu>("vectornav/imu", 10);
-    pub_gnss_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("vectornav/gnss", 10);
     pub_imu_uncompensated_ =
       this->create_publisher<sensor_msgs::msg::Imu>("vectornav/imu_uncompensated", 10);
     pub_magnetic_ =
@@ -76,6 +77,10 @@ public:
       "vectornav/velocity_body", 10);
     pub_pose_ =
       this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("vectornav/pose", 10);
+    
+    pub_fix_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("vectornav/fix", 10);
+    pub_current_pose_ =
+      this->create_publisher<geometry_msgs::msg::PoseStamped>("vectornav/current_pose", 10);
 
     //
     // Subscribers
@@ -299,7 +304,23 @@ private:
 
       msg.position_covariance_type = sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN;
 
-      pub_gnss_->publish(msg);
+      pub_fix_->publish(msg);
+    }
+
+    // Current pose (UTM)
+    {
+      geometry_msgs::msg::PoseStamped msg;
+      msg.header = msg_in->header;
+      msg.header.frame_id = "map";
+
+      double utmX = 0, utmY = 0;
+      coordinate_transition.LatLonToUTMXY(msg_in->position.x, msg_in->position.y, utmX, utmY);
+
+      msg.pose.position.x = utmX;
+      msg.pose.position.y = utmY;
+      msg.pose.position.z = 1.8;
+
+      pub_current_pose_->publish(msg);
     }
 
     // Velocity
@@ -423,6 +444,9 @@ private:
   /// Convert from DEG to RAD
   inline static double deg2rad(double in) { return in * M_PI / 180.0; }
 
+  /// UTM coordinate transform
+  CoordinateTransition coordinate_transition;
+
   //
   // Member Variables
   //
@@ -433,13 +457,14 @@ private:
   rclcpp::Publisher<sensor_msgs::msg::TimeReference>::SharedPtr pub_time_syncin_;
   rclcpp::Publisher<sensor_msgs::msg::TimeReference>::SharedPtr pub_time_pps_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr pub_imu_;
-  rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr pub_gnss_;
+  rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr pub_fix_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr pub_imu_uncompensated_;
   rclcpp::Publisher<sensor_msgs::msg::MagneticField>::SharedPtr pub_magnetic_;
   rclcpp::Publisher<sensor_msgs::msg::Temperature>::SharedPtr pub_temperature_;
   rclcpp::Publisher<sensor_msgs::msg::FluidPressure>::SharedPtr pub_pressure_;
   rclcpp::Publisher<geometry_msgs::msg::TwistWithCovarianceStamped>::SharedPtr pub_velocity_;
   rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr pub_pose_;
+  rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub_current_pose_;
 
   /// Subscribers
   rclcpp::Subscription<vectornav_msgs::msg::CommonGroup>::SharedPtr sub_vn_common_;
