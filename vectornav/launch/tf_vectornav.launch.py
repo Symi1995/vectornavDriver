@@ -6,7 +6,7 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         name='golf_vectornav_base_link_tf',
-        arguments=['0', '0', '0', '0', '0', '0', 'golf/base_link', 'golf/vectornav'],
+        arguments=['-1.464', '0.035.5', '-0.258', '0', '0', '0', 'golf/base_link', 'golf/vectornav'],
         output='screen'
     )
 
