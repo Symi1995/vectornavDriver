@@ -299,9 +299,11 @@ private:
 
       // Covariance (Convert NED to ENU)
       /// TODO(Dereck): Use DOP for better estimate?
-      const std::vector<double> orientation_covariance_ = {
-        gps_posu_.y, 0.0000, 0.0000, 0.0000, gps_posu_.x, 0.0000, 0.0000, 0.0000, gps_posu_.z};
-
+      
+      std::array<double, 9> position_covariance_ = {
+        pow(gps_posu_.x, 2), 0.0000, 0.0000, 0.0000, pow(gps_posu_.y, 2), 0.0000, 0.0000, 0.0000, pow(gps_posu_.z, 2)};
+      
+      msg.position_covariance = position_covariance_;
       msg.position_covariance_type = sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN;
 
       pub_fix_->publish(msg);
