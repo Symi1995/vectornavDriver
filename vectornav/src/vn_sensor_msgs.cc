@@ -322,6 +322,9 @@ private:
       msg.pose.position.y = utmY;
       msg.pose.position.z = 1.8;
 
+      msg.pose.orientation = msg_in->quaternion;
+      msg.pose.orientation.z = -msg_in->quaternion.z;
+
       pub_current_pose_->publish(msg);
     }
 
